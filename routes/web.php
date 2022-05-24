@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Livewire\Admin\AdminDashboardComponent;
+use App\Http\Livewire\Admin\StudentEnroll;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+
+//For Admin
+Route::middleware(['auth:sanctum', 'verified', 'authadmin'])->group(function () {
+    Route::get('/dashboard', AdminDashboardComponent::class)->name('admin.dashboard');
+    Route::get('/student-enrol', StudentEnroll::class)->name('admin.student_enrol');
+
+    Route::get('/logout', 'App\Http\Controllers\auth\LoginController@logout')->name('user.logout');
+    
 });
+

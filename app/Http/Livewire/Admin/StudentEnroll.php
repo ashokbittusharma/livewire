@@ -4,17 +4,24 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\StudentEnrollment;
+use Livewire\WithPagination;
 
 class StudentEnroll extends Component
 {
-
+    use WithPagination;
     public $students, $first_name, $last_name, $email, $phone, $student_id;
     public $updateMode = false;
+    public $selected_date;
+    protected $listeners = ["selectDate" => 'getSelectedDate'];
+    
+    public $searchTerm;
 
     public function render()
     {
-        $this->studentsInfo = StudentEnrollment::all();
-        return view('livewire.admin.student-enroll');
+        $searchTerm = '%'.$this->searchTerm.'%';
+        return view('livewire.admin.student-enroll', [
+            'studentsInfo' => StudentEnrollment::where('first_name','like', $searchTerm)->paginate(10)
+        ])->layout('layouts.admin.base');
     }
 
     /**
@@ -113,7 +120,16 @@ class StudentEnroll extends Component
      */
     public function delete($id)
     {
+
+
         StudentEnrollment::find($id)->delete();
+        $this->resetInputFields();
+        $this->updateMode = false;
         session()->flash('message', 'Student Info Deleted Successfully.');
+    }
+
+    public function getSelectedDate( $date ) {
+        
+        $this->selected_date = $date;
     }
 }

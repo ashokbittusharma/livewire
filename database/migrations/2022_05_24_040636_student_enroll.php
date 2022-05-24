@@ -19,6 +19,8 @@ class StudentEnroll extends Migration
             $table->string('last_name');
             $table->string('email');
             $table->string('phone');
+            $table->string('subjects');
+            $table->date('dob');
             $table->timestamps();
         });
     }
