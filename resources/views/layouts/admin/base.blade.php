@@ -2,7 +2,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Admin Dashboard</title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no" name="
     <!-- Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
@@ -23,27 +22,27 @@
                 </div>
                 <ul class="nav nav-mobile-menu">
                             <li class="nav-item">
-                                <a href="#" class="nav-link" data-toggle="dropdown">
+                                <a href="{{ route('admin.dashboard') }}" class="nav-link" data-toggle="dropdown">
                                     <i class="nc-icon nc-palette"></i>
                                     <span class="d-lg-none">Dashboard</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ route('user.logout')}}">
                                     <span class="no-icon">Log out</span>
                                 </a>
                             </li>
                         </ul><ul class="nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="dashboard.html">
+                    <li class="nav-item @if(request()->route()->uri === 'dashboard' )active @endif">
+                        <a class="nav-link" href="{{ route('admin.dashboard') }}">
                             <i class="nc-icon nc-chart-pie-35"></i>
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    <li>
-                        <a class="nav-link" href="./user.html">
+                    <li class="@if(request()->route()->uri === 'student-enrol' ) active @endif">
+                        <a class="nav-link"href="{{ route('admin.student_enrol') }}">
                             <i class="nc-icon nc-circle-09"></i>
-                            <p>User Profile</p>
+                            <p>Student Enrol</p>
                         </a>
                     </li>
                 </ul>
@@ -55,7 +54,7 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg " color-on-scroll="500">
                 <div class=" container-fluid  ">
-                    <a class="navbar-brand" href="javascript:void(0)"> Dashboard </a>
+                    <a class="navbar-brand" href="{{ route('admin.dashboard') }}"> Dashboard </a>
                     <button href="" class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar burger-lines"></span>
                         <span class="navbar-toggler-bar burger-lines"></span>
@@ -72,7 +71,7 @@
                         </ul>
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="{{ route('user.logout')}}">
                                     <span class="no-icon">Log out</span>
                                 </a>
                             </li>
@@ -81,15 +80,25 @@
                 </div>
             </nav>
             <!-- End Navbar -->
-            {{ @slot }}
+          
             <div class="content">
-                <div class="container-fluid></div>
+                <div class="container-fluid">
+                    
+                    @yield('content', $slot ?? '')
+
+                </div>
             </div>
 
             <footer class="footer">
-
+             
             </footer>
         </div>
     </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ==" crossorigin="anonymous"></script>
 @livewireScripts
 </body></html>

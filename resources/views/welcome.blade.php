@@ -50,7 +50,7 @@
                                         {{ session('message') }}
                                     </div>
                                 @endif
-                                <livewire:admin.student-enroll />
+                                
                                
                             </div>
                         </div>

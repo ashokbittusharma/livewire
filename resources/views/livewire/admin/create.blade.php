@@ -19,5 +19,16 @@
         <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Phone Number" wire:model="phone">
         @error('phone') <span class="text-danger">{{ $message }}</span>@enderror
     </div>
+    <div class="form-group">
+                    <label for="datepicker">Choose date</label>
+                    <div class="input-group date" data-provide="datepicker">
+                        <input type="text" class="form-control" 
+                            onchange='Livewire.emit("selectDate", this.value)'
+                        >
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                    </div>
+                </div>
     <button wire:click.prevent="store()" class="btn btn-success">Save</button>
 </form>
