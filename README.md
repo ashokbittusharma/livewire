@@ -16,7 +16,7 @@
  4. Run command : php artisan migration
  5. Run command : php artisan db:seed --class=AdminUserSeeder
  6. Run Command : php artisan serve
- 6. Login Detail 
+ 6. Admin Login Detail 
     Username : admin@yopmail.com
     password : 12345678
         
