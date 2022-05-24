@@ -9,10 +9,19 @@ use Livewire\WithPagination;
 class StudentEnroll extends Component
 {
     use WithPagination;
-    public $students, $first_name, $last_name, $email, $phone, $student_id;
+    public $students, $first_name, $last_name, $email, $phone, $subjects =[], $dob, $student_id;
     public $updateMode = false;
-    public $selected_date;
-    protected $listeners = ["selectDate" => 'getSelectedDate'];
+    public $subjectList = [
+        'Math',
+        'English',
+        'Science',
+        'Economics',
+        'Physics',
+        'Chemistry'
+    ];
+    protected $listeners = [
+        'selectedSubjectItem',
+    ];
     
     public $searchTerm;
 
@@ -20,7 +29,7 @@ class StudentEnroll extends Component
     {
         $searchTerm = '%'.$this->searchTerm.'%';
         return view('livewire.admin.student-enroll', [
-            'studentsInfo' => StudentEnrollment::where('first_name','like', $searchTerm)->paginate(10)
+            'studentsInfo' => StudentEnrollment::where('first_name','like', $searchTerm)->paginate(5)
         ])->layout('layouts.admin.base');
     }
 
@@ -34,6 +43,9 @@ class StudentEnroll extends Component
         $this->last_name = '';
         $this->email = '';
         $this->phone = '';
+        $this->subjects = '';
+        $this->dob = '';
+        $this->emit('productStore');
     }
 
     /**
@@ -43,14 +55,24 @@ class StudentEnroll extends Component
      */
     public function store()
     {
+
         $validatedDate = $this->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|digits:10',
+            'subjects' => 'required',
+            'dob' => 'required',
         ]);
-  
-        StudentEnrollment::create($validatedDate);
+        $inputData = [
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'subjects' => json_encode($this->subjects),
+            'dob' => $this->dob,
+        ];
+        StudentEnrollment::create($inputData);
   
         session()->flash('message', 'Student Enrolled Successfully.');
   
@@ -70,6 +92,8 @@ class StudentEnroll extends Component
         $this->last_name = $studentEnroll->last_name;
         $this->email = $studentEnroll->email;
         $this->phone = $studentEnroll->phone;
+        $this->subjects = json_decode($studentEnroll->subjects);
+        $this->dob = $studentEnroll->dob;
   
         $this->updateMode = true;
     }
@@ -95,8 +119,10 @@ class StudentEnroll extends Component
         $validatedDate = $this->validate([
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required',
-            'phone' => 'required'
+            'email' => 'required|email',
+            'phone' => 'required|digits:10',
+            'subjects' => 'required',
+            'dob' => 'required',
         ]);
   
         $student = StudentEnrollment::find($this->student_id);
@@ -105,6 +131,8 @@ class StudentEnroll extends Component
             'last_name' => $this->last_name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'subjects' => $this->subjects,
+            'dob' => $this->dob,
         ]);
   
         $this->updateMode = false;
@@ -128,8 +156,18 @@ class StudentEnroll extends Component
         session()->flash('message', 'Student Info Deleted Successfully.');
     }
 
-    public function getSelectedDate( $date ) {
-        
-        $this->selected_date = $date;
+    public function hydrate()
+    {
+        $this->emit('select2');
     }
+
+    public function selectedSubjectItem($item)
+    {
+        if ($item) {
+            $this->emit('selectedSubject', $item);
+        }
+        else
+            $this->subjects = null;
+    }
+
 }
